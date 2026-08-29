@@ -3,6 +3,7 @@ from .card import (
     card_factory,
     Rank,
     Suit,
+    TerminalCard,
 )
 from .deck import (
     Deck,
@@ -18,4 +19,5 @@ __all__ = [
     "Deck",
     DeckException,
     NoCardsLeftInDeckException,
+    "TerminalCard",
 ]

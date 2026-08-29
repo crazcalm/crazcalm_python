@@ -1,11 +1,104 @@
 import unittest
+from collections import namedtuple
+
 
 from crazcalm.cards import (
     Card,
     Rank,
     Suit,
     card_factory,
+    TerminalCard,
 )
+
+
+class TestTerminalCard(unittest.TestCase):
+    def test_print(self):
+        Case = namedtuple("Case", ["case", "card", "expected"])
+        cases = [
+            Case(
+                "ace of clubs",
+                TerminalCard(rank=Rank.ACE, suit=Suit.CLUBS),
+                """
+############
+# ♧        #
+#          #
+#    A     #
+#          #
+#        ♧ #
+############
+""",
+            ),
+            Case(
+                "two of hearts",
+                TerminalCard(rank=Rank.TWO, suit=Suit.HEARTS),
+                """
+############
+# ♡        #
+#          #
+#    2     #
+#          #
+#        ♡ #
+############
+""",
+            ),
+            Case(
+                "Jack of diamonds",
+                TerminalCard(rank=Rank.JACK, suit=Suit.DIAMONDS),
+                """
+############
+# ♢        #
+#          #
+#    J     #
+#          #
+#        ♢ #
+############
+""",
+            ),
+            Case(
+                "10 of spades",
+                TerminalCard(rank=Rank.TEN, suit=Suit.SPADES),
+                """
+############
+# ♤        #
+#          #
+#    10    #
+#          #
+#        ♤ #
+############
+""",
+            ),
+            Case(
+                "little joker",
+                TerminalCard(rank=Rank.JOKER1, suit=Suit.JOKER1),
+                """
+############
+# ⓛ        #
+#          #
+#    J     #
+#          #
+#        ⓛ #
+############
+""",
+            ),
+            Case(
+                "big joker",
+                TerminalCard(rank=Rank.JOKER2, suit=Suit.JOKER2),
+                """
+############
+# Ⓑ        #
+#          #
+#    J     #
+#          #
+#        Ⓑ #
+############
+""",
+            ),
+        ]
+
+        for num, case in enumerate(cases):
+            with self.subTest(f"Case {num}: {case.case}"):
+                card = str(case.card)
+                self.assertEqual(card, case.expected)
 
 
 class TestCardFactory(unittest.TestCase):
