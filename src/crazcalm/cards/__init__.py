@@ -9,6 +9,7 @@ from .deck import (
     Deck,
     DeckException,
     NoCardsLeftInDeckException,
+    TerminalDeck,
 )
 
 __all__ = [
@@ -20,4 +21,5 @@ __all__ = [
     DeckException,
     NoCardsLeftInDeckException,
     "TerminalCard",
+    "TerminalDeck",
 ]
