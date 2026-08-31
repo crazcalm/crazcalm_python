@@ -15,7 +15,7 @@ class TestDeck(unittest.TestCase):
     def setUp(self):
         self.cards = list(itertools.product(Rank.ace_to_king(), [Suit.CLUBS]))
         self.deck = Deck(cards=deepcopy(self.cards))
-        self.joker = Card(rank=Rank.JOKER1, suit=Suit.NONE)
+        self.joker = Card(rank=Rank.JOKER1, suit=Suit.JOKER1)
 
     def test_create_52_card_deck(self):
         deck = Deck.create_52_card_deck()

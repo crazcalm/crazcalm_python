@@ -73,8 +73,7 @@ class Suit(Enum):
 
 
 class PrintCardMixin:
-    def __str__(self):
-        return """
+    PRINT_CARD_FACE_UP = """
 ############
 # {s}        #
 #          #
@@ -82,13 +81,33 @@ class PrintCardMixin:
 #          #
 #        {s} #
 ############
-""".format(s=self.suit, r=self.rank)
+"""
+
+    PRINT_CARD_FACE_DOWN = """
+############
+############
+############
+### CARD ###
+############
+############
+############
+"""
+    def __str__(self):
+        result = self.PRINT_CARD_FACE_UP.format(s=self.suit, r=self.rank)
+        if self.face_down:
+            result = self.PRINT_CARD_FACE_DOWN
+        return result
 
 
 class Card:
-    def __init__(self, rank: Rank, suit: Suit):
+    def __init__(self, rank: Rank, suit: Suit, face_down: bool = True):
         self._rank = rank
         self._suit = suit
+        self._face_down = face_down
+
+    @property
+    def face_down(self):
+        return self._face_down
 
     @property
     def rank(self):
@@ -97,6 +116,9 @@ class Card:
     @property
     def suit(self):
         return self._suit
+
+    def flip(self):
+        self._face_down = False if self.face_down else True
 
 
 def card_factory(with_jokers=False, card_class=Card) -> list[Card]:

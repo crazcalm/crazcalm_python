@@ -17,7 +17,7 @@ class TestTerminalCard(unittest.TestCase):
         cases = [
             Case(
                 "ace of clubs",
-                TerminalCard(rank=Rank.ACE, suit=Suit.CLUBS),
+                TerminalCard(rank=Rank.ACE, suit=Suit.CLUBS, face_down=False),
                 """
 ############
 # ♧        #
@@ -30,7 +30,7 @@ class TestTerminalCard(unittest.TestCase):
             ),
             Case(
                 "two of hearts",
-                TerminalCard(rank=Rank.TWO, suit=Suit.HEARTS),
+                TerminalCard(rank=Rank.TWO, suit=Suit.HEARTS, face_down=False),
                 """
 ############
 # ♡        #
@@ -43,7 +43,7 @@ class TestTerminalCard(unittest.TestCase):
             ),
             Case(
                 "Jack of diamonds",
-                TerminalCard(rank=Rank.JACK, suit=Suit.DIAMONDS),
+                TerminalCard(rank=Rank.JACK, suit=Suit.DIAMONDS, face_down=False),
                 """
 ############
 # ♢        #
@@ -56,7 +56,7 @@ class TestTerminalCard(unittest.TestCase):
             ),
             Case(
                 "10 of spades",
-                TerminalCard(rank=Rank.TEN, suit=Suit.SPADES),
+                TerminalCard(rank=Rank.TEN, suit=Suit.SPADES, face_down=False),
                 """
 ############
 # ♤        #
@@ -69,7 +69,7 @@ class TestTerminalCard(unittest.TestCase):
             ),
             Case(
                 "little joker",
-                TerminalCard(rank=Rank.JOKER1, suit=Suit.JOKER1),
+                TerminalCard(rank=Rank.JOKER1, suit=Suit.JOKER1, face_down=False),
                 """
 ############
 # ⓛ        #
@@ -82,7 +82,7 @@ class TestTerminalCard(unittest.TestCase):
             ),
             Case(
                 "big joker",
-                TerminalCard(rank=Rank.JOKER2, suit=Suit.JOKER2),
+                TerminalCard(rank=Rank.JOKER2, suit=Suit.JOKER2, face_down=False),
                 """
 ############
 # Ⓑ        #
@@ -90,6 +90,19 @@ class TestTerminalCard(unittest.TestCase):
 #    J     #
 #          #
 #        Ⓑ #
+############
+""",
+            ),
+        Case(
+                "face down card",
+                TerminalCard(rank=Rank.JOKER2, suit=Suit.JOKER2, face_down=True),
+                """
+############
+############
+############
+### CARD ###
+############
+############
 ############
 """,
             ),
@@ -117,6 +130,9 @@ class TestCard(unittest.TestCase):
 
         self.assertEqual(Rank.ACE, card.rank)
         self.assertEqual(Suit.CLUBS, card.suit)
+        self.assertTrue(card.face_down)
+        card.flip()
+        self.assertFalse(card.face_down)
 
         with self.assertRaises(AttributeError):
             card.rank = Rank.TWO
