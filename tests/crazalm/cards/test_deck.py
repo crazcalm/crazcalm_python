@@ -1,5 +1,6 @@
 import unittest
 import itertools
+from collections import namedtuple
 from copy import deepcopy
 
 from crazcalm.cards import (
@@ -8,7 +9,41 @@ from crazcalm.cards import (
     Suit,
     Deck,
     NoCardsLeftInDeckException,
+    TerminalDeck,
+    TerminalCard,
 )
+
+class TestTerminalDeck(unittest.TestCase):
+    def test_print(self):
+        deck = TerminalDeck(cards=[])
+        card = TerminalCard(rank=Rank.ACE, suit=Suit.CLUBS, face_down=False)
+        expected_card_str = """
+############
+# ♧        #
+#          #
+#    A     #
+#          #
+#        ♧ #
+############
+"""
+        expected_deck_str = """
+############
+############
+############
+### Deck ###
+############
+############
+############
+"""
+
+        self.assertEqual(expected_deck_str, str(deck))
+
+        # Add face up card on top of the deck
+        deck.put_on_top(card)
+        self.assertEqual(expected_card_str, str(deck))
+        # putting the card face down
+        card.flip()
+        self.assertEqual(expected_deck_str, str(deck))
 
 
 class TestDeck(unittest.TestCase):

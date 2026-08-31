@@ -11,6 +11,23 @@ class NoCardsLeftInDeckException(DeckException):
     pass
 
 
+class PrintDeckMixin:
+    PRINT_DECK_FACE_DOWN = """
+############
+############
+############
+### Deck ###
+############
+############
+############
+"""
+    def __str__(self):
+        result = self.PRINT_DECK_FACE_DOWN
+        if self.cards_left() and not self._cards[-1].face_down:
+            result = str(self._cards[-1])
+        return result
+
+
 class Deck:
     @classmethod
     def create_52_card_deck(cls, with_jokers=False) -> Deck:
@@ -37,3 +54,6 @@ class Deck:
     def cards_left(self):
         return len(self._cards)
     
+
+class TerminalDeck(Deck, PrintDeckMixin):
+    pass
