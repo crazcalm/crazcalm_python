@@ -4,12 +4,31 @@ from crazcalm.cards import (
     card_factory,
     Card,
 )
+from crazcalm.attributes import Name
 
 
 class Player:
-    def __init__(self):
+
+    NPC_PLAYER_COUNT = 1
+
+    @classmethod
+    def create_npc(cls):
+        name = Name(name=f"NPC {cls.NPC_PLAYER_COUNT}")
+        cls.NPC_PLAYER_COUNT += 1
+        return cls(name=name)
+
+    def __init__(self, name: Name):
         self.deck = TerminalDeck(cards=[])
         self.win_pile = TerminalDeck(cards=[])
+        self._name = name
+
+    @property
+    def name(self):
+        return self._name.name
+
+    @property
+    def id(self):
+        return self._name.id
 
     def reset(self):
         self.deck = TerminalDeck(cards=[])
@@ -87,20 +106,32 @@ class Game:
             result = [player for player in self.players if player.total_cards() != 0][0]        
         return result
 
+    def hand_winner(self, played_cards) -> list[str]:
+        """
+        Will return the player ids of the players with the best card.
+        """
+        pass
+
     def play(self):
+        # WIP
         round = 0
         while self.have_winner() == False:
             print(f"round {round}")
-            """
-            I am too tired to write it now, but I want use a dict to
-            collect the cards the player plays. The key is the index of the
-            player and the value is the card.
+            played_cards = {}
+            for player in self.players:
+                if not player.lose_the_game():
+                    played_cards[player.id] = player.play_card()
 
-            Another method will compare the cards and return the index of the
-            winner.
+            winners_of_hand = self.hand_winners(played_cards)
+            if len(winners_of_hand) == 1:
+                for player in self.players:
+                    if player.am_I(winners_of_hand[0]):
+                        # pass all the cards to the winner
+                        player.add_cards_to_win_pile(played_cards.values())
 
-            I then pass the list of cards to the winner.
-            """
+            if len(winners_of_hand) > 1:
+                # need to do i the clare war!
+                pass
 
             round += 1
 
