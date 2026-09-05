@@ -12,6 +12,10 @@ class Player:
     NPC_PLAYER_COUNT = 1
 
     @classmethod
+    def create_npcs(cls, num):
+        return [Player.create_npc() for _ in range(num)]
+
+    @classmethod
     def create_npc(cls):
         name = Name(name=f"NPC {cls.NPC_PLAYER_COUNT}")
         cls.NPC_PLAYER_COUNT += 1
