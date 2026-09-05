@@ -6,6 +6,12 @@ from crazcalm.cards import (
 )
 from crazcalm.attributes import Name
 
+class PlayerException(Exception):
+    pass
+
+class PlayerNoCardsLeftException(PlayerException):
+    pass
+
 
 class Player:
 
@@ -41,7 +47,7 @@ class Player:
     def lose_the_game(self) -> bool:
         return False if self.total_cards() else True
 
-    def _play_card(self):
+    def _play_card(self) -> Card | None:
         result = None
         if self.deck.cards_left() > 0:
             result = self.deck.draw()
@@ -55,7 +61,10 @@ class Player:
         return self.deck.cards_left() + self.win_pile.cards_left()
 
     def play_card(self) -> Card:
-        return self._play_card()
+        result = self._play_card()
+        if result is None:
+            raise PlayerNoCardsLeftException()
+        return result
 
     def play_war(self) -> list[Card]:
         result = []

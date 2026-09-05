@@ -5,6 +5,7 @@ import random
 from crazcalm.attributes import Name
 from crazcalm.games.cards.war import (
     Player,
+    PlayerNoCardsLeftException,
 )
 from crazcalm.cards import Deck
 
@@ -37,6 +38,17 @@ class TestPlayer(unittest.TestCase):
         self.player.add_cards_to_win_pile(cards=[card_1, card_1, card_1])
         self.assertFalse(self.player.lose_the_game())
 
+    def test_play_card(self):
+        card_1 = self.deck.draw()
+        card_2 = self.deck.draw()
+
+        self.player.add_cards_to_win_pile([card_1, card_2])
+
+        self.assertEqual(card_1, self.player.play_card())
+        self.assertEqual(card_2, self.player.play_card())
+
+        with self.assertRaises(PlayerNoCardsLeftException):
+            self.player.play_card()
 
 
 

@@ -120,6 +120,9 @@ class Card:
     def flip(self):
         self._face_down = False if self.face_down else True
 
+    def __eq__(self, value):
+        return self.rank == value.rank and self.suit == value.suit
+
 
 def card_factory(with_jokers=False, card_class=Card) -> list[Card]:
     cards = []
