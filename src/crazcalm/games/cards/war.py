@@ -52,7 +52,7 @@ class Player:
         return result
 
     def total_cards(self):
-        return len(self.deck) + len(self.win_pile)
+        return self.deck.cards_left() + self.win_pile.cards_left()
 
     def play_card(self) -> Card:
         return self._play_card()
