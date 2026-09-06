@@ -30,8 +30,8 @@ class PrintDeckMixin:
 
 class Deck:
     @classmethod
-    def create_52_card_deck(cls, with_jokers=False) -> Deck:
-        return cls(cards=card_factory(with_jokers=with_jokers))
+    def create_52_card_deck(cls, card_class=Card, with_jokers=False) -> Deck:
+        return cls(cards=card_factory(with_jokers=with_jokers, card_class=card_class))
 
     def __init__(self, cards: list[Card]):
         self._cards = cards

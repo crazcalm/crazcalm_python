@@ -75,7 +75,6 @@ class Player:
                 card.flip()
 
             result.append(card)
-            count -= 1
 
             if self.total_cards() == 0:
                 # Flippin the last card face up
@@ -85,6 +84,8 @@ class Player:
             if count == 1:
                 # Flippin the last card face up
                 result[-1].flip()
+
+            count -= 1
         return result
 
     def add_card_to_deck(self, card: Card):
@@ -103,15 +104,15 @@ class Game:
         self.players = players
 
     def set_up_game(self):
-        deck = TerminalDeck.create_52_card_deck(cls=TerminalDeck)
+        deck = TerminalDeck.create_52_card_deck(card_class=TerminalCard)
         count = 0
-        while self.deck.cards_left() > 0:
+        while deck.cards_left() > 0:
             index = count % len(self.players)
             self.players[index].add_card_to_deck(deck.draw())
             count += 1
 
     def have_winner(self) -> bool:
-        return len(self.players) - 1 == [player for player in self.players if player.lose_the_game()]
+        return len(self.players) - 1 == len([player for player in self.players if player.lose_the_game()])
 
     def get_winner(self) -> Player | None:
         result = None
@@ -119,11 +120,19 @@ class Game:
             result = [player for player in self.players if player.total_cards() != 0][0]        
         return result
 
-    def hand_winner(self, played_cards) -> list[str]:
+    def hand_winner(self, played_cards: dict[str: Card]) -> list[str]:
         """
         Will return the player ids of the players with the best card.
         """
-        pass
+        result = []
+        played = list(played_cards.items())
+        played.sort(key=lambda item: item[1].rank.value, reverse=True)
+        result.append(played[0])
+        for (player_id, card) in played[1:]:
+            if card.rank == result[0][1].rank:
+                result.append((player_id, card))
+
+        return [player_id for (player_id, _) in result]
 
     def play(self):
         # WIP
