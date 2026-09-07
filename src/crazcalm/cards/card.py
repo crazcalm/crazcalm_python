@@ -105,6 +105,9 @@ class Card:
         self._suit = suit
         self._face_down = face_down
 
+    def __repr__(self) -> str:
+        return f"Card(rank: {self.rank.value}, suit: {self.card.value})"
+
     @property
     def face_down(self):
         return self._face_down
@@ -119,6 +122,9 @@ class Card:
 
     def flip(self):
         self._face_down = False if self.face_down else True
+
+    def __eq__(self, value):
+        return self.rank == value.rank and self.suit == value.suit
 
 
 def card_factory(with_jokers=False, card_class=Card) -> list[Card]:

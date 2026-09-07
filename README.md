@@ -12,8 +12,9 @@ python -m pip install -e .
 
 ### Test command
 
+```
 python -m unittest discover .\tests\
-
+```
 ## Bin
 
 ### Making windows commands
@@ -27,3 +28,7 @@ This still seems like magic to me, but added my bin directory to my PATH environ
 I had chatgpt make me a bash to windows cmd document that I put in the docs folder than kind of explains it. Essentially, this allows me to call `py` my `touch.py` file and the `%~d0` expands the path while the `%*` allows me to pass arugments to my python script.
 
 This means that I can write `touch hellworld.txt` in powershell and a file is now created!!!
+
+## Notes:
+### Min Python Version
+As of right now, the self referencing type hinting is forcing this to be python 3.14.

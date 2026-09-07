@@ -125,6 +125,25 @@ class TestCardFactory(unittest.TestCase):
 
 
 class TestCard(unittest.TestCase):
+    def test_eq(self):
+        card_1 = Card(rank=Rank.ACE, suit=Suit.CLUBS)
+        card_2 = Card(rank=Rank.ACE, suit=Suit.CLUBS)
+        card_3 = Card(rank=Rank.TEN, suit=Suit.CLUBS)
+        card_4 = Card(rank=Rank.ACE, suit=Suit.HEARTS)
+        card_5 = Card(rank=Rank.TEN, suit=Suit.HEARTS)
+
+        Case = namedtuple("Case", ["card_1", "card_2", "expected"])
+        cases = [
+            Case(card_1, card_2, True),
+            Case(card_1, card_3,  False),
+            Case(card_1, card_4,  False),
+            Case(card_1, card_5,  False),
+        ]
+
+        for num, case in enumerate(cases, start=1):
+            with self.subTest(f"case {num}: "):
+                self.assertEqual(case.card_1 == case.card_2, case.expected)
+
     def test_card_properties(self):
         card = Card(rank=Rank.ACE, suit=Suit.CLUBS)
 
