@@ -105,6 +105,9 @@ class Card:
         self._suit = suit
         self._face_down = face_down
 
+    def __repr__(self) -> str:
+        return f"Card(rank: {self.rank.value}, suit: {self.card.value})"
+
     @property
     def face_down(self):
         return self._face_down

@@ -40,6 +40,9 @@ class Player:
     def id(self):
         return self._name.id
 
+    def am_I(self, name: str):
+        return self._name.am_I(name)
+
     def reset(self):
         self.deck = TerminalDeck(cards=[])
         self.win_pile = TerminalDeck(cards=[])
@@ -105,6 +108,7 @@ class Game:
 
     def set_up_game(self):
         deck = TerminalDeck.create_52_card_deck(card_class=TerminalCard)
+        deck.shuffle()
         count = 0
         while deck.cards_left() > 0:
             index = count % len(self.players)
@@ -134,31 +138,49 @@ class Game:
 
         return [player_id for (player_id, _) in result]
 
-    def play(self):
+    def play(self) -> Player:
         # WIP
         round = 0
         while self.have_winner() == False:
+            cards_to_win = []
             print(f"round {round}")
             played_cards = {}
             for player in self.players:
                 if not player.lose_the_game():
-                    played_cards[player.id] = player.play_card()
+                    card = player.play_card()
+                    played_cards[player.id] = card
+                    cards_to_win.append(card)
+            winners_of_hand = self.hand_winner(played_cards)
+            while len(winners_of_hand) > 1:
+                played_cards = {}
+                winners = []
+                for player_id in winners_of_hand:
+                    for player in self.players:
+                        if player.am_I(player_id):
+                            winners.append(player)
+                
+                for player in winners:
+                    if not player.lose_the_game():
+                        cards = player.play_war()
+                        played_cards[player.id] = cards[-1]
+                        cards_to_win += cards
+                    if len(played_cards.keys()) > 1:
+                        winners_of_hand = self.hand_winner(played_cards)
+                    elif len(played_cards.keys()) == 1:
+                        winners_of_hand = played_cards.keys()
+                    else:
+                        print("I am not sure what to do in this case...")
 
-            winners_of_hand = self.hand_winners(played_cards)
+
             if len(winners_of_hand) == 1:
                 for player in self.players:
                     if player.am_I(winners_of_hand[0]):
                         # pass all the cards to the winner
-                        player.add_cards_to_win_pile(played_cards.values())
-
-            if len(winners_of_hand) > 1:
-                # need to do i the clare war!
-                pass
-
+                        player.add_cards_to_win_pile(cards_to_win)        
             round += 1
-
-            
-        print(f"The winner is {self.get_winner()}")
+        winner = self.get_winner()          
+        print(f"The winner is {winner}")
+        return winner
 
         
         

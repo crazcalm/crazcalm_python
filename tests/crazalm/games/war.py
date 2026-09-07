@@ -1,4 +1,5 @@
 import unittest
+import random
 from collections import namedtuple
 
 from crazcalm.attributes import Name
@@ -29,6 +30,12 @@ class TestWarGame(unittest.TestCase):
             [player.total_cards() for player in self.game.players],
             expected,
         )
+
+    def test_play(self):
+        random.seed(42)
+        self.game.set_up_game()
+        winner = self.game.play()
+        self.assertTrue(self.game.players[-1].am_I(winner.name))
 
     def test_have_winner(self):
         self.assertFalse(self.game.have_winner())
@@ -68,7 +75,6 @@ class TestWarGame(unittest.TestCase):
 
         for num, case in enumerate(cases, start=1):
             with self.subTest(f"Case {num}:"):
-                breakpoint()
                 result = self.game.hand_winner(case.hands)
                 self.assertListEqual(result, case.expected)
 
